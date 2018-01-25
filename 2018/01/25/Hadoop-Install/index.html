@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Distribute System, Hadoop," />
 
 
 
@@ -79,12 +79,13 @@
 
 
 
-<meta name="description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3">
+<meta name="description" content="HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3  创建新的用户hadoop创建新的用户hadoop，配置hadoop集群的三个用户的用户名都是hadoop，现在先在物理机上（也是master）">
+<meta name="keywords" content="Distribute System, Hadoop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="Hadoop Install">
 <meta property="og:url" content="http://yoursite.com/2018/01/25/Hadoop-Install/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3">
+<meta property="og:description" content="HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3  创建新的用户hadoop创建新的用户hadoop，配置hadoop集群的三个用户的用户名都是hadoop，现在先在物理机上（也是master）">
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kvm.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/hadoop%20version.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/hosts.png">
@@ -104,10 +105,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/_1.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kill_task.png">
 <meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kill_task_ui.png">
-<meta property="og:updated_time" content="2018-01-25T14:50:51.233Z">
+<meta property="og:updated_time" content="2018-01-25T14:55:42.291Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3">
+<meta name="twitter:title" content="Hadoop Install">
+<meta name="twitter:description" content="HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop 2.7.3  创建新的用户hadoop创建新的用户hadoop，配置hadoop集群的三个用户的用户名都是hadoop，现在先在物理机上（也是master）">
 <meta name="twitter:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kvm.png">
 
 
@@ -144,7 +145,7 @@
 
 
 
-  <title> | Hexo</title>
+  <title>Hadoop Install | Hexo</title>
   
 
 
@@ -288,7 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Hadoop Install</h1>
         
 
         <div class="post-meta">
@@ -300,7 +301,7 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-25T22:50:51+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-25T15:50:26+08:00">
                 2018-01-25
               </time>
             
@@ -338,9 +339,7 @@
       
 
       
-        <hr>
-<p>title: Hadoop Install<br>date: 2018-01-25 15:50:26<br>tags: Distribute System</p>
-<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="PART-A-Hadoop-集群安装"><a href="#PART-A-Hadoop-集群安装" class="headerlink" title="PART A Hadoop 集群安装"></a>PART A Hadoop 集群安装</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
+        <h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="PART-A-Hadoop-集群安装"><a href="#PART-A-Hadoop-集群安装" class="headerlink" title="PART A Hadoop 集群安装"></a>PART A Hadoop 集群安装</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
 <li>使用Ubuntu 16.04 64位作为master的环境</li>
 <li>在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。</li>
 <li>在三台机器上安装 Hadoop 2.7.3</li>
@@ -426,6 +425,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Distribute-System-Hadoop/" rel="tag"># Distribute System, Hadoop</a>
+          
+        </div>
+      
 
       
       
@@ -435,8 +440,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/25/Spark/" rel="next" title="Spark">
-                <i class="fa fa-chevron-left"></i> Spark
+              <a href="/2018/01/25/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
               </a>
             
           </div>
@@ -444,6 +449,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/25/Spark/" rel="prev" title="Spark">
+                Spark <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -528,6 +537,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">Tags</span>
+                </a>
+              </div>
             
 
           </nav>
