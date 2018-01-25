@@ -79,12 +79,36 @@
 
 
 
-<meta property="og:type" content="website">
+<meta name="description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System, hadoop HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/01/25/Hadoop-Install/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System, hadoop HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kvm.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/hadoop%20version.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/hosts.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/ssh.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/core.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/hdfs.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/mapred.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/yarn.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/masterjps.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/slave1jps.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/slave2jps.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/master50070.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/master_8080.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/eclipse.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/_.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/_2.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kill_task.png">
+<meta property="og:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kill_task_ui.png">
+<meta property="og:updated_time" content="2018-01-25T09:12:27.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="title: Hadoop Installdate: 2018-01-25 15:50:26tags: Distribute System, hadoop HadoopPART A Hadoop 集群安装环境 使用Ubuntu 16.04 64位作为master的环境 在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。 在三台机器上安装 Hadoop">
+<meta name="twitter:image" content="http://yoursite.com/2018/01/25/Hadoop-Install/img/kvm.png">
 
 
 
@@ -114,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/25/Hadoop-Install/"/>
 
 
 
 
 
-  <title>Hexo</title>
+  <title> | Hexo</title>
   
 
 
@@ -139,8 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -233,9 +256,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -265,9 +288,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/25/Hadoop-Install/" itemprop="url">Unbenannt</a></h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -317,9 +338,7 @@
       
 
       
-        
-          
-            <hr>
+        <hr>
 <p>title: Hadoop Install<br>date: 2018-01-25 15:50:26<br>tags: Distribute System, hadoop</p>
 <h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="PART-A-Hadoop-集群安装"><a href="#PART-A-Hadoop-集群安装" class="headerlink" title="PART A Hadoop 集群安装"></a>PART A Hadoop 集群安装</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
 <li>使用Ubuntu 16.04 64位作为master的环境</li>
@@ -393,8 +412,6 @@
 <h2 id="PART-C-Output"><a href="#PART-C-Output" class="headerlink" title="PART C Output"></a>PART C Output</h2><p>执行结果如下：<br><img src="./img/_2.png" alt="image"><br>具体的全部结果会附在文档的另一个文件中<br>为了测试正确性，将input改成了文档中给出的那个简单的例子的，得到的ouput 如下：<br><img src="./img/_1.png" alt="image"><br>和文档的结果一致。</p>
 <p>在执行的某一过程中关闭某个task，命令如下：<br><img src="./img/kill_task.png" alt="image"><br>task_id 可以从master：8080中找到，注意后面还要加_0.<br>从UI中看到任务确实被关闭了<br><img src="./img/kill_task_ui.png" alt="image"><br>可以看到一个task被关闭或者中断后，它会重启另外一个task来完成它的任务，这个task可能是在slave1上，也可能在slave2上，这里是在slave2上。所以可以看出一个task 被关闭后会启动其它的来代替它</p>
 
-          
-        
       
     </div>
     
@@ -411,140 +428,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/25/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/25/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Veröffentlicht am</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-25T12:22:16+08:00">
-                2018-01-25
-              </time>
+              <a href="/2018/01/25/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -554,10 +459,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -565,6 +471,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -585,8 +495,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -628,6 +547,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop"><span class="nav-number">1.</span> <span class="nav-text">Hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PART-A-Hadoop-集群安装"><span class="nav-number">1.1.</span> <span class="nav-text">PART A Hadoop 集群安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境"><span class="nav-number">1.1.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建新的用户hadoop"><span class="nav-number">1.1.2.</span> <span class="nav-text">创建新的用户hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装kvm"><span class="nav-number">1.1.3.</span> <span class="nav-text">安装kvm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-SSH-server"><span class="nav-number">1.1.4.</span> <span class="nav-text">安装 SSH server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Java-环境"><span class="nav-number">1.1.5.</span> <span class="nav-text">安装 Java 环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Hadoop-2-7-3"><span class="nav-number">1.1.6.</span> <span class="nav-text">安装 Hadoop 2.7.3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slave-环境配置"><span class="nav-number">1.1.7.</span> <span class="nav-text">slave 环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#master和slave通讯设置"><span class="nav-number">1.1.8.</span> <span class="nav-text">master和slave通讯设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh无密码登陆节点"><span class="nav-number">1.1.9.</span> <span class="nav-text">ssh无密码登陆节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置集群-分布式环境"><span class="nav-number">1.1.10.</span> <span class="nav-text">配置集群/分布式环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动hadoop"><span class="nav-number">1.1.11.</span> <span class="nav-text">启动hadoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PART-B-code-of-MapReduce"><span class="nav-number">1.2.</span> <span class="nav-text">PART B code of MapReduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PART-C-Output"><span class="nav-number">1.3.</span> <span class="nav-text">PART C Output</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -768,6 +703,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
