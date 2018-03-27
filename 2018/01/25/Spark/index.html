@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="KeXH, Blog" />
+  <meta name="keywords" content="分布式系统,spark," />
 
 
 
@@ -79,14 +79,35 @@
 
 
 
+<meta name="description" content="Spark 学习（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。） 安装sparkspark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的。这部分pdf中有，这里就简单提及下  下载安装包首先到官网下载安装包，下载spark for ha">
+<meta name="keywords" content="分布式系统,spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark">
 <meta property="og:url" content="http://yoursite.com/2018/01/25/Spark/index.html">
 <meta property="og:site_name" content="KeXH Blog">
+<meta property="og:description" content="Spark 学习（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。） 安装sparkspark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的。这部分pdf中有，这里就简单提及下  下载安装包首先到官网下载安装包，下载spark for ha">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-25T09:14:57.602Z">
+<meta property="og:image" content="http://i.imgur.com/jMxpyPt.png">
+<meta property="og:image" content="http://i.imgur.com/DoVVCj6.png">
+<meta property="og:image" content="http://i.imgur.com/7o1ZSC6.png">
+<meta property="og:image" content="http://i.imgur.com/aOqttlk.png">
+<meta property="og:image" content="http://i.imgur.com/XqIorVn.png">
+<meta property="og:image" content="http://i.imgur.com/hn7rPbM.png">
+<meta property="og:image" content="http://i.imgur.com/qdR5WKb.png">
+<meta property="og:image" content="http://i.imgur.com/WPGLfSB.png">
+<meta property="og:image" content="http://i.imgur.com/OFsVcHv.png">
+<meta property="og:image" content="http://i.imgur.com/b5GiFPJ.png">
+<meta property="og:image" content="http://i.imgur.com/J6EjKN3.png">
+<meta property="og:image" content="http://i.imgur.com/3Bvp5vW.png">
+<meta property="og:image" content="http://i.imgur.com/aQqksN3.png">
+<meta property="og:image" content="http://i.imgur.com/94EPgGd.png">
+<meta property="og:image" content="http://i.imgur.com/JegkDoV.png">
+<meta property="og:image" content="http://i.imgur.com/eH3KMuw.png">
+<meta property="og:updated_time" content="2018-03-27T13:12:41.655Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
+<meta name="twitter:description" content="Spark 学习（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。） 安装sparkspark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的。这部分pdf中有，这里就简单提及下  下载安装包首先到官网下载安装包，下载spark for ha">
+<meta name="twitter:image" content="http://i.imgur.com/jMxpyPt.png">
 
 
 
@@ -326,7 +347,53 @@
       
 
       
-        
+        <h1 id="Spark-学习"><a href="#Spark-学习" class="headerlink" title="Spark 学习"></a>Spark 学习</h1><p>（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。）</p>
+<h2 id="安装spark"><a href="#安装spark" class="headerlink" title="安装spark"></a>安装spark</h2><p>spark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的。这部分pdf中有，这里就简单提及下</p>
+<ul>
+<li>下载安装包<br>首先到官网下载安装包，下载spark for hadoop，然后解压，放到／usr／local／spark目录下</li>
+<li>安装scala<br>这个网上的安装教程很多，下载后，设置下环境变量即可</li>
+<li>设置配置文件，这里配置文件只要设置下env和slave就好，就进行简单的 配置就好。配置文件如下。<br> <img src="http://i.imgur.com/jMxpyPt.png" alt="env_sh"><br> <img src="http://i.imgur.com/DoVVCj6.png" alt="slave"></li>
+<li>启动Spark</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+<p>！！！注意到后面发现，部署到spark上的时候会提示一个hadoop native lib找不到的错误，google了一下，需要在环境变量下加下LD_LIBRARY_PATH,如下图，在～／。brashrc中添加</p>
+<p> <img src="http://i.imgur.com/7o1ZSC6.png" alt="brashrc"></p>
+<h2 id="运行spark"><a href="#运行spark" class="headerlink" title="运行spark"></a>运行spark</h2><p>在开始编写scala 程序之前，先来将pdf所给的程序跑通。</p>
+<ul>
+<li><p><strong> 搭建intelintellij idea 环境 </strong></p>
+<ul>
+<li>先到官网下载intelintellij idea，然后安装时选择要安装scale sbt插件，然后一步步下来即可</li>
+<li><p><strong> local 运行spark 程序 </strong><br>在本地idea上能够将程序跑起来便于我们之后写程序的调试</p>
+<p>创建“New Project”，选择“Scala”。“Project SDK”选择JDK目录，“Scala SDK”选择Scala目录<br><img src="http://i.imgur.com/aOqttlk.png" alt="new_project"><br>选择菜单中的“File” -&gt;“Project Structure” -&gt;“libraries” -&gt;+“java”，导入Spark安装目录/usr/local/spark/下jar目录的所有的包。<br>或者也可以修改下build.sbt 添加相关的依赖包<br><img src="http://i.imgur.com/XqIorVn.png" alt="build_sbt"><br>将pdf中的程序拷贝到新建的project 中，f选择菜单中的“Run” -&gt;“Edit Configurations”，修改“Main class”和“VM options”<br><img src="http://i.imgur.com/hn7rPbM.png" alt="run_config"><br>然后点击执行，可以就可以看到答案了<br><img src="http://i.imgur.com/qdR5WKb.png" alt="example_result"></p>
+</li>
+</ul>
+</li>
+<li><p><strong> 将select 程序部署到spark 环境下 </strong></p>
+<p>相关的部署命令可以在spark 官网找到。但这里有一个比较麻烦的地方就是jar包的路径问题。<br><img src="http://i.imgur.com/WPGLfSB.png" alt="deploy_path"><br>一开用了本地的路径，一直报找不到jar包的错误，看下官网的说明是之前hdfs，以及所有节点都要能访问到的路径，也就是说要想放在本地，就得往各个节点都发一份过去，这样太麻烦了，所以我选择将包放到hdfs上。<br>相关的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -put 【local-path】 usr／hadoop／input</span><br></pre></td></tr></table></figure>
+<p>然后使用spark-submit 将jar上传上去<br><img src="http://i.imgur.com/OFsVcHv.png" alt="spark_submit_test_sql"></p>
+</li>
+</ul>
+<h2 id="PartA"><a href="#PartA" class="headerlink" title="PartA"></a>PartA</h2><p>实验的partA 部分要求我们用RDD操作实现两条sql语句，其实这个和样例中的有点像是，只是这个sql语句要比样例中的要复杂。</p>
+<p>首先去查找相关的rdd的api，主要设计到的有map，sortb，join，groupby，sortby，setkey，leftouterJoin等api</p>
+<h3 id="第一条sql的函数"><a href="#第一条sql的函数" class="headerlink" title="第一条sql的函数"></a>第一条sql的函数</h3><p>select type, sum(value) from Device, DValues where id = did and did &gt; 0 and did &lt; 1000<br>and date is null group by type order by type</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">def sql1(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  val hdfsFilePath2 = &quot;hdfs:///user/hadoop/input/dvalue/&quot;</span><br><span class="line">// val hdfsFilePath1 = &quot;file:///home/hadoop/Desktop/test1.txt&quot;</span><br><span class="line"> // val hdfsFilePath2 = &quot;file:///home/hadoop/Desktop/test2.txt&quot;</span><br><span class="line">  val conf = new SparkConf()</span><br><span class="line">  conf.setAppName(&quot;sql_1&quot;)</span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line">  val Dvalue =sc.textFile(hdfsFilePath2, 3)</span><br><span class="line">  val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, data_, value)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val Dvalue_key=DvalueRdd.keyBy(k=&gt;k._1)</span><br><span class="line">  val join_data=Device_key.join(Dvalue_key).map(t=&gt;(t._1,t._2._1._2,t._2._1._3,t._2._2._2,t._2._2._3))</span><br><span class="line">  val filte_data=join_data.filter(t=&gt;t._1&gt;0&amp;&amp; t._1&lt;1000 &amp;&amp;(t._4==&quot;NULL&quot;||t._4==&quot;null&quot;))</span><br><span class="line">  //filte_data.foreach(println)</span><br><span class="line">  val groupby_data=filte_data.groupBy(t=&gt;t._2)</span><br><span class="line">  val sum_data=groupby_data.map(t=&gt;(t._1,t._2.map(t=&gt;t._5).sum))</span><br><span class="line">  val order_data=sum_data.sortBy(t=&gt;t._1)</span><br><span class="line">  order_data.foreach(println)</span><br><span class="line"> // order_data.repartition(1).saveAsTextFile(&quot;hdfs:///user/hadoop/result1&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在本地调试时可以将输入放到本地路径，上传到spark时，将输入文件放到hdfs的input文件夹中，并且将程序的地址修改，逻辑很简单，首先将连个表读取，然后先将id=did的join，最后再groupby tpye，再通过map来提取出sum和id，type。</p>
+<p>通过idea 导出jar 包，将其放到hdfs上<br><img src="http://i.imgur.com/b5GiFPJ.png" alt="hdfs_upload"></p>
+<p>然后通过spark-submit 部署<br><img src="http://i.imgur.com/J6EjKN3.png" alt="spark_submit_test_sql"></p>
+<p>打开webui Master：8080可以看到<br><img src="http://i.imgur.com/3Bvp5vW.png" alt="spl1 master"><br>然后过了一会可以看到任务执行完了<br><img src="http://i.imgur.com/aQqksN3.png" alt="sql1 finsh"><br>点击查看输出可以看到<br><img src="http://i.imgur.com/94EPgGd.png" alt="part1_reslut"></p>
+<h3 id="第二条sql的函数"><a href="#第二条sql的函数" class="headerlink" title="第二条sql的函数"></a>第二条sql的函数</h3><p>select date, type, avg(value) from Device left join DValues on id = did and did &gt; 0 and did&lt; 1000 and date is null group by date, type order by date, type;</p>
+<p>感觉这两条语句很像，区别的地方在于这里是leftOuterJoin，可能会产none的值，要将这些值设为0或者null。还有就是求avg而不是sum，因为没有找到直接求avg的api，则avg可以用sum／size来得到。具体代码如下，逻辑和第一个很相识</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">def sql2(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  val hdfsFilePath2 = &quot;hdfs:///user/hadoop/input/dvalue/&quot;</span><br><span class="line">  //val hdfsFilePath1 = &quot;file:///home/hadoop/Desktop/test1.txt&quot;</span><br><span class="line"> // val hdfsFilePath2 = &quot;file:///home/hadoop/Desktop/test2.txt&quot;</span><br><span class="line">  val conf = new SparkConf()</span><br><span class="line">  conf.setAppName(&quot;sql_2&quot;)</span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line">  val Dvalue =sc.textFile(hdfsFilePath2, 3)</span><br><span class="line">  val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, data_, value)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val Dvalue_key=DvalueRdd.keyBy(k=&gt;k._1)</span><br><span class="line">  val join_data=Device_key.leftOuterJoin(Dvalue_key).map(t=&gt;&#123;</span><br><span class="line">     val a=t._1</span><br><span class="line">     val b=t._2._1._2</span><br><span class="line">     val c=t._2._1._3</span><br><span class="line">     val temp=t._2._2.getOrElse((0,&quot;NULL&quot;,0.0))</span><br><span class="line">     val d=temp._2;</span><br><span class="line">     val e=temp._3;</span><br><span class="line">    (a,b,c,d,e)</span><br><span class="line">  &#125;)</span><br><span class="line">  val filte_data=join_data.filter(t=&gt;t._1&gt;0&amp;&amp; t._1&lt;1000 &amp;&amp;t._4==&quot;NULL&quot;||t._4==&quot;null&quot;)</span><br><span class="line">  //filte_data.foreach(println)</span><br><span class="line">  val groupby_data=filte_data.groupBy(t=&gt;t._2)</span><br><span class="line"></span><br><span class="line">  val avg_data=groupby_data.map(t=&gt; &#123;</span><br><span class="line">    val data=&quot;NULL&quot;</span><br><span class="line">    val type_ = t._1</span><br><span class="line">    val avg=  t._2.map(t=&gt;t._5).toSet.sum/t._2.map(t=&gt;t._5).toSet.size</span><br><span class="line">    (data,type_,avg)</span><br><span class="line">  &#125;</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  val order_data= avg_data.sortBy(t=&gt;t._2)</span><br><span class="line">  order_data.collect.foreach(println)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后剩下的步骤和第一个一样，最后得到的结果<br><img src="http://i.imgur.com/JegkDoV.png" alt="result_sql2"><br>这里好多同学的结果不一样，但逻辑应该是没什么问题。</p>
+<h2 id="PartB"><a href="#PartB" class="headerlink" title="PartB"></a>PartB</h2><p>这部分是要求实现spark stream。<br>下载两个依赖的包spark-streaming-mqtt_2.10-1.0.0.jar和org.eclipse.paho.client.mqttv3-1.0.1.jar，将它们分别放到所有节点下spark目录下的／jars文件夹中，不然的话到时会报相关的类找不到。</p>
+<p>stream 其实就是要求实时能够实时处理数据，这部分代码的书写经过前partA，应该还是比较简单的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">def stream(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  //val hdfsFilePath1 = &quot;file:///home/hadoop/Downloads/data/device/&quot;</span><br><span class="line">  val conf = new SparkConf().setAppName(&quot;stream&quot;)</span><br><span class="line"></span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val ssc = new StreamingContext(sc, Seconds(1))</span><br><span class="line"></span><br><span class="line"> val Dvalue= MQTTUtils.createStream(ssc, &quot;tcp://114.55.92.31:1883&quot;, &quot;SparkStreamingMQTT&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, (data_, value))</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val res=DvalueRdd.transform(rdd=&gt;&#123;</span><br><span class="line">        rdd.join(Device_key).filter(r=&gt;r._2._1._2&gt;100)map(r=&gt;(r._1,r._2._2._2,r._2._2._3))</span><br><span class="line">   &#125;)</span><br><span class="line"></span><br><span class="line">  // Print the first ten elements of each RDD generated in this DStream to the console</span><br><span class="line">  res.print()</span><br><span class="line"> //res.saveAsTextFiles(&quot;file:///home/hadoop/Desktop/result/test.txt&quot;)</span><br><span class="line">  ssc.start()</span><br><span class="line">  ssc.awaitTermination()</span><br><span class="line">&#125;![Uploading spark_partB_result.png… (sifv1ly2w)]()</span><br></pre></td></tr></table></figure></p>
+<p>其中一个表还是类似于之前从hdfs 读取创建rdd，另一个通过stream 流来读取数据。rdd和dstream没有直接的join的函数，可以让dstream通过transform来执行rdd的api函数。写下来的逻辑就很简单了。</p>
+<p>到这里以为就可以，在本地点击运行，结果发现根本没有print 出res，倒是控制台中一直有提醒我有拿到相关数据。但是当我点击结束程序时这时才把结果给我print 出来。当时想不明白究竟怎么回事，想着我先部署到spark上看看不会这样，通过页面的ui看执行的log，发现一样情况，只有info告诉我有拿到数据，但就是没有print出来。更惨的是，部署上去的kill掉后也没有打印出相关结果（在本地起码，最后起码有给我打印下结果），同时还试了下用saveastextfiles函数，情况基本一样，没有输出。这就很尴尬，没输出怎么知道结果呢？</p>
+<p>最后还是帅气的助教给出了解释，是因为在本地运行时只有一个核，而输出是需要独自一个核的，因此print会被阻塞，而我的虚拟机因为也是分配了一个核，所以也是一样的情况，并且spark上我的kill是把整个kill了，print的输出程序也别kill了所以看不到输出的。</p>
+<p>知道问题就好解决了，最简单的方法，我给虚拟机分配两个核不就可以啦吗。<br>修改完后，问题终于解决了，输出结果如下<br><img src="http://i.imgur.com/eH3KMuw.png" alt="spark_partB_result"></p>
+<p>到此，整个lab完成</p>
+
       
     </div>
     
@@ -340,6 +407,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式系统/" rel="tag"># 分布式系统</a>
+          
+            <a href="/tags/spark/" rel="tag"># spark</a>
+          
+        </div>
       
 
       
@@ -410,8 +485,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -443,7 +527,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -476,6 +560,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-学习"><span class="nav-number">1.</span> <span class="nav-text">Spark 学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装spark"><span class="nav-number">1.1.</span> <span class="nav-text">安装spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行spark"><span class="nav-number">1.2.</span> <span class="nav-text">运行spark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PartA"><span class="nav-number">1.3.</span> <span class="nav-text">PartA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一条sql的函数"><span class="nav-number">1.3.1.</span> <span class="nav-text">第一条sql的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二条sql的函数"><span class="nav-number">1.3.2.</span> <span class="nav-text">第二条sql的函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PartB"><span class="nav-number">1.4.</span> <span class="nav-text">PartB</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
