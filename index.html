@@ -378,54 +378,16 @@
       
         
           
-            <h1 id="Spark-学习"><a href="#Spark-学习" class="headerlink" title="Spark 学习"></a>Spark 学习</h1><p>（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。）</p>
-<h2 id="安装spark"><a href="#安装spark" class="headerlink" title="安装spark"></a>安装spark</h2><p>spark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的。这部分pdf中有，这里就简单提及下</p>
-<ul>
-<li>下载安装包<br>首先到官网下载安装包，下载spark for hadoop，然后解压，放到／usr／local／spark目录下</li>
-<li>安装scala<br>这个网上的安装教程很多，下载后，设置下环境变量即可</li>
-<li>设置配置文件，这里配置文件只要设置下env和slave就好，就进行简单的 配置就好。配置文件如下。<br> <img src="http://i.imgur.com/jMxpyPt.png" alt="env_sh"><br> <img src="http://i.imgur.com/DoVVCj6.png" alt="slave"></li>
-<li>启动Spark</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./sbin/start-all.sh</span><br></pre></td></tr></table></figure>
-<p>！！！注意到后面发现，部署到spark上的时候会提示一个hadoop native lib找不到的错误，google了一下，需要在环境变量下加下LD_LIBRARY_PATH,如下图，在～／。brashrc中添加</p>
-<p> <img src="http://i.imgur.com/7o1ZSC6.png" alt="brashrc"></p>
-<h2 id="运行spark"><a href="#运行spark" class="headerlink" title="运行spark"></a>运行spark</h2><p>在开始编写scala 程序之前，先来将pdf所给的程序跑通。</p>
-<ul>
-<li><p><strong> 搭建intelintellij idea 环境 </strong></p>
-<ul>
-<li>先到官网下载intelintellij idea，然后安装时选择要安装scale sbt插件，然后一步步下来即可</li>
-<li><p><strong> local 运行spark 程序 </strong><br>在本地idea上能够将程序跑起来便于我们之后写程序的调试</p>
-<p>创建“New Project”，选择“Scala”。“Project SDK”选择JDK目录，“Scala SDK”选择Scala目录<br><img src="http://i.imgur.com/aOqttlk.png" alt="new_project"><br>选择菜单中的“File” -&gt;“Project Structure” -&gt;“libraries” -&gt;+“java”，导入Spark安装目录/usr/local/spark/下jar目录的所有的包。<br>或者也可以修改下build.sbt 添加相关的依赖包<br><img src="http://i.imgur.com/XqIorVn.png" alt="build_sbt"><br>将pdf中的程序拷贝到新建的project 中，f选择菜单中的“Run” -&gt;“Edit Configurations”，修改“Main class”和“VM options”<br><img src="http://i.imgur.com/hn7rPbM.png" alt="run_config"><br>然后点击执行，可以就可以看到答案了<br><img src="http://i.imgur.com/qdR5WKb.png" alt="example_result"></p>
-</li>
-</ul>
-</li>
-<li><p><strong> 将select 程序部署到spark 环境下 </strong></p>
-<p>相关的部署命令可以在spark 官网找到。但这里有一个比较麻烦的地方就是jar包的路径问题。<br><img src="http://i.imgur.com/WPGLfSB.png" alt="deploy_path"><br>一开用了本地的路径，一直报找不到jar包的错误，看下官网的说明是之前hdfs，以及所有节点都要能访问到的路径，也就是说要想放在本地，就得往各个节点都发一份过去，这样太麻烦了，所以我选择将包放到hdfs上。<br>相关的命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -put 【local-path】 usr／hadoop／input</span><br></pre></td></tr></table></figure>
-<p>然后使用spark-submit 将jar上传上去<br><img src="http://i.imgur.com/OFsVcHv.png" alt="spark_submit_test_sql"></p>
-</li>
-</ul>
-<h2 id="PartA"><a href="#PartA" class="headerlink" title="PartA"></a>PartA</h2><p>实验的partA 部分要求我们用RDD操作实现两条sql语句，其实这个和样例中的有点像是，只是这个sql语句要比样例中的要复杂。</p>
-<p>首先去查找相关的rdd的api，主要设计到的有map，sortb，join，groupby，sortby，setkey，leftouterJoin等api</p>
-<h3 id="第一条sql的函数"><a href="#第一条sql的函数" class="headerlink" title="第一条sql的函数"></a>第一条sql的函数</h3><p>select type, sum(value) from Device, DValues where id = did and did &gt; 0 and did &lt; 1000<br>and date is null group by type order by type</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">def sql1(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  val hdfsFilePath2 = &quot;hdfs:///user/hadoop/input/dvalue/&quot;</span><br><span class="line">// val hdfsFilePath1 = &quot;file:///home/hadoop/Desktop/test1.txt&quot;</span><br><span class="line"> // val hdfsFilePath2 = &quot;file:///home/hadoop/Desktop/test2.txt&quot;</span><br><span class="line">  val conf = new SparkConf()</span><br><span class="line">  conf.setAppName(&quot;sql_1&quot;)</span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line">  val Dvalue =sc.textFile(hdfsFilePath2, 3)</span><br><span class="line">  val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, data_, value)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val Dvalue_key=DvalueRdd.keyBy(k=&gt;k._1)</span><br><span class="line">  val join_data=Device_key.join(Dvalue_key).map(t=&gt;(t._1,t._2._1._2,t._2._1._3,t._2._2._2,t._2._2._3))</span><br><span class="line">  val filte_data=join_data.filter(t=&gt;t._1&gt;0&amp;&amp; t._1&lt;1000 &amp;&amp;(t._4==&quot;NULL&quot;||t._4==&quot;null&quot;))</span><br><span class="line">  //filte_data.foreach(println)</span><br><span class="line">  val groupby_data=filte_data.groupBy(t=&gt;t._2)</span><br><span class="line">  val sum_data=groupby_data.map(t=&gt;(t._1,t._2.map(t=&gt;t._5).sum))</span><br><span class="line">  val order_data=sum_data.sortBy(t=&gt;t._1)</span><br><span class="line">  order_data.foreach(println)</span><br><span class="line"> // order_data.repartition(1).saveAsTextFile(&quot;hdfs:///user/hadoop/result1&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在本地调试时可以将输入放到本地路径，上传到spark时，将输入文件放到hdfs的input文件夹中，并且将程序的地址修改，逻辑很简单，首先将连个表读取，然后先将id=did的join，最后再groupby tpye，再通过map来提取出sum和id，type。</p>
-<p>通过idea 导出jar 包，将其放到hdfs上<br><img src="http://i.imgur.com/b5GiFPJ.png" alt="hdfs_upload"></p>
-<p>然后通过spark-submit 部署<br><img src="http://i.imgur.com/J6EjKN3.png" alt="spark_submit_test_sql"></p>
-<p>打开webui Master：8080可以看到<br><img src="http://i.imgur.com/3Bvp5vW.png" alt="spl1 master"><br>然后过了一会可以看到任务执行完了<br><img src="http://i.imgur.com/aQqksN3.png" alt="sql1 finsh"><br>点击查看输出可以看到<br><img src="http://i.imgur.com/94EPgGd.png" alt="part1_reslut"></p>
-<h3 id="第二条sql的函数"><a href="#第二条sql的函数" class="headerlink" title="第二条sql的函数"></a>第二条sql的函数</h3><p>select date, type, avg(value) from Device left join DValues on id = did and did &gt; 0 and did&lt; 1000 and date is null group by date, type order by date, type;</p>
-<p>感觉这两条语句很像，区别的地方在于这里是leftOuterJoin，可能会产none的值，要将这些值设为0或者null。还有就是求avg而不是sum，因为没有找到直接求avg的api，则avg可以用sum／size来得到。具体代码如下，逻辑和第一个很相识</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">def sql2(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  val hdfsFilePath2 = &quot;hdfs:///user/hadoop/input/dvalue/&quot;</span><br><span class="line">  //val hdfsFilePath1 = &quot;file:///home/hadoop/Desktop/test1.txt&quot;</span><br><span class="line"> // val hdfsFilePath2 = &quot;file:///home/hadoop/Desktop/test2.txt&quot;</span><br><span class="line">  val conf = new SparkConf()</span><br><span class="line">  conf.setAppName(&quot;sql_2&quot;)</span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line">  val Dvalue =sc.textFile(hdfsFilePath2, 3)</span><br><span class="line">  val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, data_, value)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val Dvalue_key=DvalueRdd.keyBy(k=&gt;k._1)</span><br><span class="line">  val join_data=Device_key.leftOuterJoin(Dvalue_key).map(t=&gt;&#123;</span><br><span class="line">     val a=t._1</span><br><span class="line">     val b=t._2._1._2</span><br><span class="line">     val c=t._2._1._3</span><br><span class="line">     val temp=t._2._2.getOrElse((0,&quot;NULL&quot;,0.0))</span><br><span class="line">     val d=temp._2;</span><br><span class="line">     val e=temp._3;</span><br><span class="line">    (a,b,c,d,e)</span><br><span class="line">  &#125;)</span><br><span class="line">  val filte_data=join_data.filter(t=&gt;t._1&gt;0&amp;&amp; t._1&lt;1000 &amp;&amp;t._4==&quot;NULL&quot;||t._4==&quot;null&quot;)</span><br><span class="line">  //filte_data.foreach(println)</span><br><span class="line">  val groupby_data=filte_data.groupBy(t=&gt;t._2)</span><br><span class="line"></span><br><span class="line">  val avg_data=groupby_data.map(t=&gt; &#123;</span><br><span class="line">    val data=&quot;NULL&quot;</span><br><span class="line">    val type_ = t._1</span><br><span class="line">    val avg=  t._2.map(t=&gt;t._5).toSet.sum/t._2.map(t=&gt;t._5).toSet.size</span><br><span class="line">    (data,type_,avg)</span><br><span class="line">  &#125;</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  val order_data= avg_data.sortBy(t=&gt;t._2)</span><br><span class="line">  order_data.collect.foreach(println)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后剩下的步骤和第一个一样，最后得到的结果<br><img src="http://i.imgur.com/JegkDoV.png" alt="result_sql2"><br>这里好多同学的结果不一样，但逻辑应该是没什么问题。</p>
-<h2 id="PartB"><a href="#PartB" class="headerlink" title="PartB"></a>PartB</h2><p>这部分是要求实现spark stream。<br>下载两个依赖的包spark-streaming-mqtt_2.10-1.0.0.jar和org.eclipse.paho.client.mqttv3-1.0.1.jar，将它们分别放到所有节点下spark目录下的／jars文件夹中，不然的话到时会报相关的类找不到。</p>
-<p>stream 其实就是要求实时能够实时处理数据，这部分代码的书写经过前partA，应该还是比较简单的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">def stream(): Unit =&#123;</span><br><span class="line">  val hdfsFilePath1 = &quot;hdfs:///user/hadoop/input/device/&quot;</span><br><span class="line">  //val hdfsFilePath1 = &quot;file:///home/hadoop/Downloads/data/device/&quot;</span><br><span class="line">  val conf = new SparkConf().setAppName(&quot;stream&quot;)</span><br><span class="line"></span><br><span class="line">  val sc = new SparkContext(conf)</span><br><span class="line">  val Device=sc.textFile(hdfsFilePath1, 3)</span><br><span class="line">  val tblRdd1 =Device.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd1= tblRdd1.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DeviceRdd = firstSelRdd1.map(selData =&gt; &#123;</span><br><span class="line">    val id = selData._1.toInt</span><br><span class="line">    val type_ = selData._2</span><br><span class="line">    val location = selData._3</span><br><span class="line">    (id, type_, location)</span><br><span class="line">  &#125;)</span><br><span class="line">  val Device_key= DeviceRdd.keyBy(t =&gt; t._1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  val ssc = new StreamingContext(sc, Seconds(1))</span><br><span class="line"></span><br><span class="line"> val Dvalue= MQTTUtils.createStream(ssc, &quot;tcp://114.55.92.31:1883&quot;, &quot;SparkStreamingMQTT&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> val tblRdd2 =Dvalue.map(line =&gt; line.split(&quot;,&quot;))</span><br><span class="line"></span><br><span class="line">  val firstSelRdd2= tblRdd2.map(arrays =&gt;</span><br><span class="line">    (arrays(0), arrays(1), arrays(2)))</span><br><span class="line">  val DvalueRdd = firstSelRdd2.map(selData =&gt; &#123;</span><br><span class="line">    val did = selData._1.toInt</span><br><span class="line">    val data_ = selData._2</span><br><span class="line">    val value = selData._3.toDouble</span><br><span class="line">    (did, (data_, value))</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  val res=DvalueRdd.transform(rdd=&gt;&#123;</span><br><span class="line">        rdd.join(Device_key).filter(r=&gt;r._2._1._2&gt;100)map(r=&gt;(r._1,r._2._2._2,r._2._2._3))</span><br><span class="line">   &#125;)</span><br><span class="line"></span><br><span class="line">  // Print the first ten elements of each RDD generated in this DStream to the console</span><br><span class="line">  res.print()</span><br><span class="line"> //res.saveAsTextFiles(&quot;file:///home/hadoop/Desktop/result/test.txt&quot;)</span><br><span class="line">  ssc.start()</span><br><span class="line">  ssc.awaitTermination()</span><br><span class="line">&#125;![Uploading spark_partB_result.png… (sifv1ly2w)]()</span><br></pre></td></tr></table></figure></p>
-<p>其中一个表还是类似于之前从hdfs 读取创建rdd，另一个通过stream 流来读取数据。rdd和dstream没有直接的join的函数，可以让dstream通过transform来执行rdd的api函数。写下来的逻辑就很简单了。</p>
-<p>到这里以为就可以，在本地点击运行，结果发现根本没有print 出res，倒是控制台中一直有提醒我有拿到相关数据。但是当我点击结束程序时这时才把结果给我print 出来。当时想不明白究竟怎么回事，想着我先部署到spark上看看不会这样，通过页面的ui看执行的log，发现一样情况，只有info告诉我有拿到数据，但就是没有print出来。更惨的是，部署上去的kill掉后也没有打印出相关结果（在本地起码，最后起码有给我打印下结果），同时还试了下用saveastextfiles函数，情况基本一样，没有输出。这就很尴尬，没输出怎么知道结果呢？</p>
-<p>最后还是帅气的助教给出了解释，是因为在本地运行时只有一个核，而输出是需要独自一个核的，因此print会被阻塞，而我的虚拟机因为也是分配了一个核，所以也是一样的情况，并且spark上我的kill是把整个kill了，print的输出程序也别kill了所以看不到输出的。</p>
-<p>知道问题就好解决了，最简单的方法，我给虚拟机分配两个核不就可以啦吗。<br>修改完后，问题终于解决了，输出结果如下<br><img src="http://i.imgur.com/eH3KMuw.png" alt="spark_partB_result"></p>
-<p>到此，整个lab完成</p>
-
-          
+          Spark 学习（文件中sparksql.scala中三个函数，sql1和sql2，分别对应partA的两个程序，stream函数对应的是partB的程序。另外两个文件是PartA中两个函数执行的结果。）
+安装sparkspark 搭建是在hadoop的基础上进行的，所以spark的搭建是比较简单的
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/25/Spark/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -585,79 +547,20 @@
       
         
           
-            <h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><h2 id="PART-A-Hadoop-集群安装"><a href="#PART-A-Hadoop-集群安装" class="headerlink" title="PART A Hadoop 集群安装"></a>PART A Hadoop 集群安装</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><ul>
-<li>使用Ubuntu 16.04 64位作为master的环境</li>
-<li>在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。</li>
-<li>在三台机器上安装 Hadoop 2.7.3</li>
-</ul>
-<h3 id="创建新的用户hadoop"><a href="#创建新的用户hadoop" class="headerlink" title="创建新的用户hadoop"></a>创建新的用户hadoop</h3><p>创建新的用户hadoop，配置hadoop集群的三个用户的用户名都是hadoop，现在先在物理机上（也是master）上先创建hadoop 用户，之后在虚拟机中也是创建hadoop用户。</p>
-<h3 id="安装kvm"><a href="#安装kvm" class="headerlink" title="安装kvm"></a>安装kvm</h3><p>kvm 是基于内核的虚拟机。<br>在安装之前，先进去bios 模式中，确认开启了内核的虚拟化。一开始就是没有开启，结果安装不成功。<br>确认开启后。安装命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install qemu-kvm libvirt-bin virtinst bridge-utils cpu-checker</span><br><span class="line">确认安装</span><br><span class="line">$ kvm-ok</span><br><span class="line">INFO: /dev/kvm exists</span><br><span class="line">KVM acceleration can be used</span><br></pre></td></tr></table></figure>
-<p>安装成功后，搜索应用程序virt-manager，打开后会发现就像vmware的操作一样，很容易管理。<br>kvm 默认的网络连接是NAT的，我们的，NAT的话虚拟机是无法被外网的服务器所访问到的，但是在我们的项目中是足够，我们只需要三台机器能够互联即可。因此就也没有必要去配置桥连接，使用默认的设置即可。<br>接下来我们创建两台虚拟机slave1和slave2</p>
-<p><img src="./img/kvm.png" alt="image">)</p>
-<h3 id="安装-SSH-server"><a href="#安装-SSH-server" class="headerlink" title="安装 SSH server"></a>安装 SSH server</h3><p>先在master上，安装ssh 和java，另外的两台虚拟机也需要同样安装。</p>
-<p>集群、单节点模式都需要用到 SSH 登（类似于远程登陆，你可以登录某台 Linux 主机，并且在上面运行命令），Ubuntu 默认已安装了 SSH client，此外还需要安装 SSH server：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure>
-<p>之后用于master 和slaver的通讯，密钥配置在后面解释，能够无密码登陆。</p>
-<h3 id="安装-Java-环境"><a href="#安装-Java-环境" class="headerlink" title="安装 Java 环境"></a>安装 Java 环境</h3><p>安装好java ，设置好环境变量。</p>
-<h3 id="安装-Hadoop-2-7-3"><a href="#安装-Hadoop-2-7-3" class="headerlink" title="安装 Hadoop 2.7.3"></a>安装 Hadoop 2.7.3</h3><p>从官网镜像下载stable 中的2.7.3中的文件。然后将hadoop 安装在／usr／local中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxf ~/Download/hadoop-2.7.3.tar.gz -C /usr/local #解压到/usr/local中</span><br><span class="line">cd /usr/local/</span><br><span class="line">sudo mv ./hadoop-2.7.3/ ./hadoop            # 将文件夹名改为hadoop</span><br><span class="line">sudo chown -R hadoop ./hadoop       # 修改文件权限</span><br></pre></td></tr></table></figure>
-<p>查看 hadoop 的版本号，确认安装成功。<br><img src="./img/hadoop version.png" alt="image"></p>
-<h3 id="slave-环境配置"><a href="#slave-环境配置" class="headerlink" title="slave 环境配置"></a>slave 环境配置</h3><p>在slave1 和slave2 中同样安装 ssh server 和 java 环境，先不用安装hadoop ，之后会在master 配置好，直接副本传递给他们。</p>
-<h3 id="master和slave通讯设置"><a href="#master和slave通讯设置" class="headerlink" title="master和slave通讯设置"></a>master和slave通讯设置</h3><p>先修改各个节点的主机名：分别为master，slave1，slave2。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/hostname</span><br></pre></td></tr></table></figure>
-<p>查看主机和虚拟机的ip地址，用ifconfig命令。<br>然后执行如下命令修改自己所用节点的IP映射</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/hosts</span><br></pre></td></tr></table></figure>
-<p>本机的修改如下：</p>
-<p>  <img src="./img/hosts.png" alt="image"></p>
-<p>(hostname 修改重启生效）</p>
-<h3 id="ssh无密码登陆节点"><a href="#ssh无密码登陆节点" class="headerlink" title="ssh无密码登陆节点"></a>ssh无密码登陆节点</h3><p>这个操作是要让 Master 节点可以无密码 SSH 登陆到各个 Slave 节点上。<br>执行以下命令，并将密钥传给两个slave。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh               # 如果没有该目录，先执行一次ssh localhost</span><br><span class="line">rm ./id_rsa*            # 删除之前生成的公匙（如果有）</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line"></span><br><span class="line">cat ./id_rsa.pub &gt;&gt; ./authorized_keys</span><br><span class="line"></span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@Slave1:/home/hadoop/</span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@Slave2:/home/hadoop/</span><br></pre></td></tr></table></figure>
-<p>在slave1和slave2中分别执行以下代码，使密钥生效。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp ~/.ssh/id_rsa.pub hadoop@Slave1:/home/hadoop/</span><br></pre></td></tr></table></figure>
-<p>测试是否可以正确无秘钥登陆。</p>
-<p> <img src="./img/ssh.png" alt="image"></p>
-<h3 id="配置集群-分布式环境"><a href="#配置集群-分布式环境" class="headerlink" title="配置集群/分布式环境"></a>配置集群/分布式环境</h3><p>++先在 ~/.bashrc加入hadoop的环境变量。++</p>
-<p>对基本的五个文件进行配置，slaves、core-site.xml、hdfs-site.xml、mapred-site.xml、yarn-site.xml 。</p>
-<ul>
-<li>slave 中删掉默认的loacalhost，添加上slave1和slave2。</li>
-<li><p>core-site.xml<br><img src="./img/core.png" alt="image"></p>
-</li>
-<li><p>hdfs-site.xml<br><img src="./img/hdfs.png" alt="image"></p>
-<ul>
-<li>mapred-site.xml<br>替换掉默认文件 mapred-site.xml.template<br><img src="./img/mapred.png" alt="image"></li>
-</ul>
-</li>
-<li><p>yarn-site.xml<br><img src="./img/yarn.png" alt="image"></p>
-</li>
-</ul>
-<p>配置好，此时要将hadoop 备份直接拷贝给两个slave，这里用  了scp 远程拷贝的命令。</p>
-<p>在 Master 节点上执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local</span><br><span class="line">sudo rm -r ./hadoop/tmp     # 删除 Hadoop 临时文件</span><br><span class="line">sudo rm -r ./hadoop/logs/*   # 删除日志文件</span><br><span class="line">tar -zcf ~/hadoop.master.tar.gz  ./hadoop   # 先压缩再复制</span><br><span class="line">cd ~</span><br><span class="line">scp ./hadoop.master.tar.gz Slave1:/home/hadoop</span><br></pre></td></tr></table></figure>
-<p>在两个slave 上执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -r /usr/local/hadoop    # 删掉旧的（如果存在）</span><br><span class="line">sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local</span><br><span class="line">sudo chown -R hadoop /usr/local/hadoop</span><br></pre></td></tr></table></figure>
-<h3 id="启动hadoop"><a href="#启动hadoop" class="headerlink" title="启动hadoop"></a>启动hadoop</h3><p>到此，环境已经搭配好了，启动起来试试。<br>首次启动需要先在 Master 节点执行 NameNode 的格式化：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format       # 首次运行需要执行初始化，之后不需要</span><br></pre></td></tr></table></figure>
-<pre><code>接着启动hadoop
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-all.sh</span><br></pre></td></tr></table></figure>
-<p>通过jps命令查看Master和slave上的进程</p>
-<p><img src="./img/masterjps.png" alt="image"></p>
-<p><img src="./img/slave1jps.png" alt="image"></p>
-<p><img src="./img/slave2jps.png" alt="image"></p>
-<p>通过 Web 页面看到查看 DataNode 和 NameNode 的状态：<a href="http://master:50070/" target="_blank" rel="noopener">http://master:50070/</a> 和 任务状态<a href="http://master:8088/" target="_blank" rel="noopener">http://master:8088/</a></p>
-<p><img src="./img/master50070.png" alt="image"><br><img src="./img/master_8080.png" alt="image"></p>
-<h2 id="PART-B-code-of-MapReduce"><a href="#PART-B-code-of-MapReduce" class="headerlink" title="PART B code of MapReduce"></a>PART B code of MapReduce</h2><p>要求编写map reduce 程序，打算配置下eclipse 方便能够调试，先下载了eclipse 然后下载了eclipse-hadoop 插件，也成功的连接起来了。  看下图中的MapReduce localtion是能够连接到HDFS的<br>    <img src="./img/eclipse.png" alt="image"></p>
-<p>但是部署的时候发现一直能办法把写好的程序的jar 上传到分布式的环境上去，一直报找不到。但是在单机模式hadoop 是可以用eclipse 跑起来的，后来看到网上有人说有eclipse 在本地调试程序，成功后在用命令行部署到分布式的环境中去。我也是写好调通后，导出jar包，再用命令行部署到云端去。</p>
-<p>lab 中要求实现一个累屎微信共同好友的mapreduce 任务。逻辑很简单，因为每个的好友都给了出来，那么map 中做的任务就可以是将一个人 A 的好友两两组合，作为key，他们的共同好友那就A ，A作为value。因为两个人有共同好友，那么他们的一定都在这个 共同好友的朋友中，所以这样是能够找到全部人的。这里还有一个问题就是组合的前后顺序问题，因为 A B和B A应该是同一对的，所以map组合的时候要比较下两个人的名字，默认将小的放在前面即可。</p>
-<p>Reduce 函数中就简单将所有相同key的value合并起来即可。</p>
-<p>代码如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">  package org.apache.hadoop.examples;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.StringTokenizer;</span><br><span class="line"></span><br><span class="line">import org.apache.hadoop.conf.Configuration;</span><br><span class="line">import org.apache.hadoop.fs.Path;</span><br><span class="line">import org.apache.hadoop.io.IntWritable;</span><br><span class="line">import org.apache.hadoop.io.Text;</span><br><span class="line">import org.apache.hadoop.mapreduce.Job;</span><br><span class="line">import org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line">import org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line">import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"></span><br><span class="line">public class wechat &#123;</span><br><span class="line"></span><br><span class="line">  public static class TokenizerMapper</span><br><span class="line">       extends Mapper&lt;Object, Text, Text, Text&gt;&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private Text k = new Text();</span><br><span class="line">    private Text val=new Text();</span><br><span class="line"></span><br><span class="line">    public void map(Object key, Text value, Context context</span><br><span class="line">                    ) throws IOException, InterruptedException &#123;</span><br><span class="line">      StringTokenizer itr = new StringTokenizer(value.toString());</span><br><span class="line">      while (itr.hasMoreTokens()) &#123;</span><br><span class="line">         String str[]=itr.nextToken().split(&quot;:&quot;);</span><br><span class="line">         if(str[0]==&quot;&quot;)</span><br><span class="line">        	 return;</span><br><span class="line">         val.set(str[0]);</span><br><span class="line">         String friend_com[]=str[1].split(&quot;,&quot;);</span><br><span class="line">         if(friend_com.length&gt;1)&#123;</span><br><span class="line">        	 for(int i=0;i&lt;friend_com.length;i++)&#123;</span><br><span class="line">        		 for(int j=i+1;j&lt;friend_com.length;j++)&#123;</span><br><span class="line">        			 if(friend_com[i].compareTo(friend_com[j])&lt;0)&#123;</span><br><span class="line">        				 k.set(&quot;&#123;&quot;+friend_com[i]+&quot;,&quot;+friend_com[j]+&quot;&#125;&quot;);</span><br><span class="line">        			 &#125;else&#123;</span><br><span class="line">        				 k.set(&quot;&#123;&quot;+friend_com[j]+&quot;,&quot;+friend_com[i]+&quot;&#125;&quot;);</span><br><span class="line">        			 &#125;</span><br><span class="line"></span><br><span class="line">        			 context.write(k, val);</span><br><span class="line">        		 &#125;</span><br><span class="line">        	 &#125;</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static class IntSumReducer</span><br><span class="line">       extends Reducer&lt;Text,Text,Text,Text&gt; &#123;</span><br><span class="line">    private Text result = new Text();</span><br><span class="line"></span><br><span class="line">    public void reduce(Text key, Iterable&lt;Text&gt; values,</span><br><span class="line">                       Context context</span><br><span class="line">                       ) throws IOException, InterruptedException &#123;</span><br><span class="line">      String sum = &quot;&quot;;</span><br><span class="line">      Iterator&lt;Text&gt;it=values.iterator();</span><br><span class="line">      String val;</span><br><span class="line">      val=it.next().toString();</span><br><span class="line">      sum +=val;</span><br><span class="line">      while ( it.hasNext()) &#123;</span><br><span class="line">    	 sum +=&quot;,&quot;;</span><br><span class="line">    	 val=it.next().toString();</span><br><span class="line">          sum +=val;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">      result.set(sum);</span><br><span class="line">      context.write(key, result);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static void main(String[] args) throws Exception &#123;</span><br><span class="line">    Configuration conf = new Configuration();</span><br><span class="line">    Job job = Job.getInstance(conf, &quot;wechat&quot;);</span><br><span class="line">    job.setJarByClass(wechat.class);</span><br><span class="line">    job.setMapperClass(TokenizerMapper.class);</span><br><span class="line">    job.setCombinerClass(IntSumReducer.class);</span><br><span class="line">    job.setReducerClass(IntSumReducer.class);</span><br><span class="line">    job.setOutputKeyClass(Text.class);</span><br><span class="line">    job.setOutputValueClass(Text.class);</span><br><span class="line">    FileInputFormat.addInputPath(job, new Path(args[0]));</span><br><span class="line">    FileOutputFormat.setOutputPath(job, new Path(args[1]));</span><br><span class="line">    System.exit(job.waitForCompletion(true) ? 0 : 1);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参照 wordcount 程序修改的<br>导出jar包后上传到分布式环境运行<br><img src="./img/_.png" alt="image"></p>
-<p>结果在part C中给出。</p>
-<h2 id="PART-C-Output"><a href="#PART-C-Output" class="headerlink" title="PART C Output"></a>PART C Output</h2><p>执行结果如下：<br><img src="./img/_2.png" alt="image"><br>具体的全部结果会附在文档的另一个文件中<br>为了测试正确性，将input改成了文档中给出的那个简单的例子的，得到的ouput 如下：<br><img src="./img/_1.png" alt="image"><br>和文档的结果一致。</p>
-<p>在执行的某一过程中关闭某个task，命令如下：<br><img src="./img/kill_task.png" alt="image"><br>task_id 可以从master：8080中找到，注意后面还要加_0.<br>从UI中看到任务确实被关闭了<br><img src="./img/kill_task_ui.png" alt="image"><br>可以看到一个task被关闭或者中断后，它会重启另外一个task来完成它的任务，这个task可能是在slave1上，也可能在slave2上，这里是在slave2上。所以可以看出一个task 被关闭后会启动其它的来代替它</p>
+          HadoopPART A Hadoop 集群安装环境
+使用Ubuntu 16.04 64位作为master的环境
+在ubuntu 上安装kvm 虚拟机，开启两台Ubuntu 16.04 的虚拟机作为slave。
+在三台机器上安装 Hadoop 2.7.3
 
-          
+创建新的用户hadoop创建新的用户had
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/25/Hadoop-Install/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -817,17 +720,15 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/25/hello-world/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -991,6 +892,26 @@
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -1149,6 +1070,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   
