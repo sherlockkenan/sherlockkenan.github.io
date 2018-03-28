@@ -5,14 +5,21 @@
     
   <url>
     <loc>http://www.kexuehan.com/2018/03/28/hexo%20seo%E4%BC%98%E5%8C%96/</loc>
-    <lastmod>2018-03-28T06:28:13.299Z</lastmod>
+    <lastmod>2018-03-28T07:19:11.156Z</lastmod>
     <data>
         <display>
-        <title></title>
-        <pubTime>2018-03-28T06:26:47.576Z</pubTime>
+        <title>hexo  SEO优化，提交到搜索引擎</title>
+        <pubTime>2018-03-28T04:00:53.000Z</pubTime>
         
+        <tag>hexo</tag>
+         
+        <tag>seo</tag>
+         
          
            
+             
+              <breadCrumb title="hexo" url="http://www.kexuehan.com/categories/hexo/"/>
+          
         </display>
     </data>
     </url>
@@ -20,7 +27,7 @@
     
   <url>
     <loc>http://www.kexuehan.com/2018/03/28/hexo%20next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</loc>
-    <lastmod>2018-03-28T05:31:09.481Z</lastmod>
+    <lastmod>2018-03-28T06:59:25.578Z</lastmod>
     <data>
         <display>
         <title>hexo next 主题美化</title>
