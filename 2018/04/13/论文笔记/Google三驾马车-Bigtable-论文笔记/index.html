@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="hexo," />
+  <meta name="keywords" content="bigtable,论文笔记," />
 
 
 
@@ -86,20 +86,25 @@
 
 
 
-<meta name="description" content="主题修改修改文章底部的那个带#号的标签具体实现方法： 修改模板/themes/next/layout/_macro/post.swig，搜索 rel=”tag”&amp;gt;#，将 # 换成">
-<meta name="keywords" content="hexo">
+<meta name="description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
+<meta name="keywords" content="bigtable,论文笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo next 主题美化">
-<meta property="og:url" content="http://www.kexuehan.com/2018/03/28/hexo next主题美化/index.html">
+<meta property="og:title" content="Google三驾马车-Bigtable-论文笔记">
+<meta property="og:url" content="http://www.kexuehan.com/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/index.html">
 <meta property="og:site_name" content="KeXH Blog">
-<meta property="og:description" content="主题修改修改文章底部的那个带#号的标签具体实现方法： 修改模板/themes/next/layout/_macro/post.swig，搜索 rel=”tag”&amp;gt;#，将 # 换成">
+<meta property="og:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15222150256742.png">
-<meta property="og:updated_time" content="2018-03-28T06:59:25.578Z">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15236080017543.jpg">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238544902241.jpg">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238545943203.jpg">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238547779907.jpg">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238546947751.jpg">
+<meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238556495043.jpg">
+<meta property="og:updated_time" content="2018-04-16T05:59:39.274Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo next 主题美化">
-<meta name="twitter:description" content="主题修改修改文章底部的那个带#号的标签具体实现方法： 修改模板/themes/next/layout/_macro/post.swig，搜索 rel=”tag”&amp;gt;#，将 # 换成">
-<meta name="twitter:image" content="http://oznz4l1s0.bkt.clouddn.com/15222150256742.png">
+<meta name="twitter:title" content="Google三驾马车-Bigtable-论文笔记">
+<meta name="twitter:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
+<meta name="twitter:image" content="http://oznz4l1s0.bkt.clouddn.com/15236080017543.jpg">
 
 
 
@@ -129,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://www.kexuehan.com/2018/03/28/hexo next主题美化/"/>
+  <link rel="canonical" href="http://www.kexuehan.com/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/"/>
 
 
 
 
 
-  <title>hexo next 主题美化 | KeXH Blog</title>
+  <title>Google三驾马车-Bigtable-论文笔记 | KeXH Blog</title>
   
 
 
@@ -271,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.kexuehan.com/2018/03/28/hexo next主题美化/">
+    <link itemprop="mainEntityOfPage" href="http://www.kexuehan.com/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Elviske">
@@ -288,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hexo next 主题美化</h1>
+          <h1 class="post-title" itemprop="name headline">Google三驾马车-Bigtable-论文笔记</h1>
         
 
         <div class="post-meta">
@@ -300,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T12:00:53+08:00">
-                2018-03-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-13T10:00:59+08:00">
+                2018-04-13
               </time>
             
 
@@ -323,8 +328,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">hexo</span>
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
                   </a>
                 </span>
 
@@ -341,8 +346,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/03/28/hexo next主题美化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/03/28/hexo next主题美化/" itemprop="commentCount"></span>
+                <a href="/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -369,7 +374,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  41
+                  1,113
                 </span>
               
 
@@ -385,7 +390,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
@@ -406,9 +411,31 @@
       
 
       
-        <h1 id="主题修改"><a href="#主题修改" class="headerlink" title="主题修改"></a>主题修改</h1><h3 id="修改文章底部的那个带-号的标签"><a href="#修改文章底部的那个带-号的标签" class="headerlink" title="修改文章底部的那个带#号的标签"></a>修改文章底部的那个带#号的标签</h3><p><strong>具体实现方法</strong>：</p>
-<p>修改模板/themes/next/layout/_macro/post.swig，搜索 rel=”tag”&gt;#，将 # 换成<i class="fa fa-tag"></i></p>
-<p><img src="http://oznz4l1s0.bkt.clouddn.com/15222150256742.png" alt=""></p>
+        <h4 id="什么是Bigtable"><a href="#什么是Bigtable" class="headerlink" title="什么是Bigtable"></a>什么是Bigtable</h4><p>相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。</p>
+<p>事实上它还是一个分布式的多层map的存储的结构。</p>
+<h4 id="Building-Blocks"><a href="#Building-Blocks" class="headerlink" title="Building Blocks"></a>Building Blocks</h4><p>在bigtable 用了其他的很多的Google的组件。</p>
+<ul>
+<li>使用Google分布式文件系统(GFS)存储日志和数据文件。</li>
+<li>BigTable还依赖一个高可用的、持久化的分布式锁服务组件，叫做Chubby。用于选举master</li>
+<li>一般会运行在共享的集群中，依赖于共享集群的任务调度。</li>
+</ul>
+<h4 id="Data-model"><a href="#Data-model" class="headerlink" title="Data model"></a>Data model</h4><p>在bigtable 中，还是提供了类似于表的的数据结构，会有数据的row 和colum， 和一般的不同的是，每一个行的列是可以不同的，列的数量也是可以不一致的。对于数据的查找，需要先找到对应的一行，然后再去找这一行中的某一列。同时数据还会有不同版本的相关的信息。</p>
+<blockquote>
+<p>(row:string, column:string, time:int64) →  string</p>
+</blockquote>
+<p>如下面的例子，可以通过<br>（com.cnn.www，anchor:cnnsi.com，t9）来找到CNN。t9是版本，是根据timestamp来构造的。</p>
+<p><img src="http://oznz4l1s0.bkt.clouddn.com/15236080017543.jpg" alt=""></p>
+<h4 id="SSTable"><a href="#SSTable" class="headerlink" title="SSTable"></a>SSTable</h4><p>BigTable数据在内部使用google  SSTable文件格式存储。SSTable提供一个从键（key）到值（value）的持久化的、已排序、不可更改的映射（Map），这里的key和value 的都是任意的字节（Byte）串。<br>对SSTable提供了如下操作：查询与一个指定key值相关的value，或者遍历指定key值范围内的所有键值对。从内部看，SSTable是一连串的数据块（通常每个块的大小是64KB，但是这个大小是可以配置的）。SSTable 会使用索引来加速查找，索引一般存储在数据的末尾位置。如图：<br><img src="http://oznz4l1s0.bkt.clouddn.com/15238544902241.jpg" alt=""></p>
+<h4 id="Tablet"><a href="#Tablet" class="headerlink" title="Tablet"></a>Tablet</h4><p>Tablet 是包含了一个表中多行，一个tablet事实上是存储在一个机器上的一块信息。</p>
+<p><img src="http://oznz4l1s0.bkt.clouddn.com/15238545943203.jpg" alt=""><br>其次，对于一个table来说，可能会分为多个tablet，而tablet又是由不同的sstable组成的，多个tablet可以共享一个sstable<br><img src="http://oznz4l1s0.bkt.clouddn.com/15238547779907.jpg" alt=""></p>
+<p>对于tablet 的查找，使用的是类似于文件系统的多级的索引结构：<br><img src="http://oznz4l1s0.bkt.clouddn.com/15238546947751.jpg" alt=""></p>
+<p>使用一个三层的、类似于Ｂ+树[10]的结构存储tablet的位置信息。<br>其中第一层是存储在chubby file的中，也就是分布式锁的系统。客户程序库会缓存tablet的位置信息。如果客户程序不知道一个tablet的位置信息，或者发现它缓存的地址信息不正确，那么客户程序就递归移动到tablet位置层次；如果客户端缓存是空的，那么寻址算法需要通过三次网络来回通信寻址，这其中包括了一次Chubby读操作。如果客户端缓存的地址信息过期了，那么寻址算法可能进行多达6次（alex注：其中的三次通信发现缓存过期，另外三次更新缓存数据）网络来回通信，因为过期缓存条目只有在没有查到数据（upon misses）的时候才能发现 (假设元数据tablet没有被频繁的移动）。。<br>为了减少开销，会于读取多个的tablet 一次</p>
+<h4 id="基本的服务"><a href="#基本的服务" class="headerlink" title="基本的服务"></a>基本的服务</h4><p>Bigtable集群包括三个主要部分：一个供客户端使用的库，一个主服务器（master server），许多片服务器（tablet server）。</p>
+<p>每个tablet一次分配给一个tablet服务器。master服务器记录活跃的tablet服务器、当前tablet到tablet服务器的分配、包括哪些tablet还没有被分配。一个tablet 服务器管理着多个tablet。</p>
+<p>客户端的操作都是bypass master的</p>
+<h4 id="读写操作"><a href="#读写操作" class="headerlink" title="读写操作"></a>读写操作</h4><p>当片服务器收到一个写请求，片服务器首先检查请求是否合法。如果合法，先将写请求提交到日志去，然后将数据写入内存中的memtable。memtable相当于SSTable的缓存，当memtable成长到一定规模会被冻结，Bigtable随之创建一个新的memtable，并且将冻结的memtable转换为SSTable格式写入GFS，这个操作称为minor compaction。</p>
+<p><img src="http://oznz4l1s0.bkt.clouddn.com/15238556495043.jpg" alt=""></p>
+<p>当片服务器收到一个读请求，同样要检查请求是否合法。如果合法，这个读操作会查看所有SSTable文件和memtable的合并视图，因为SSTable和memtable本身都是已排序的，所以合并相当快。</p>
 
       
     </div>
@@ -426,7 +453,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+            <a href="/tags/bigtable/" rel="tag"><i class="fa fa-tag"></i> bigtable</a>
+          
+            <a href="/tags/论文笔记/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
           
         </div>
       
@@ -439,8 +468,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/28/hexo seo优化/" rel="next" title="hexo  SEO优化，提交到搜索引擎">
-                <i class="fa fa-chevron-left"></i> hexo  SEO优化，提交到搜索引擎
+              <a href="/2018/03/28/hexo next主题美化/" rel="next" title="hexo next 主题美化">
+                <i class="fa fa-chevron-left"></i> hexo next 主题美化
               </a>
             
           </div>
@@ -448,10 +477,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/" rel="prev" title="Google三驾马车-Bigtable-论文笔记">
-                Google三驾马车-Bigtable-论文笔记 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -618,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主题修改"><span class="nav-number">1.</span> <span class="nav-text">主题修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改文章底部的那个带-号的标签"><span class="nav-number">1.0.1.</span> <span class="nav-text">修改文章底部的那个带#号的标签</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是Bigtable"><span class="nav-number">1.</span> <span class="nav-text">什么是Bigtable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Building-Blocks"><span class="nav-number">2.</span> <span class="nav-text">Building Blocks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Data-model"><span class="nav-number">3.</span> <span class="nav-text">Data model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSTable"><span class="nav-number">4.</span> <span class="nav-text">SSTable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tablet"><span class="nav-number">5.</span> <span class="nav-text">Tablet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本的服务"><span class="nav-number">6.</span> <span class="nav-text">基本的服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读写操作"><span class="nav-number">7.</span> <span class="nav-text">读写操作</span></a></li></ol></div>
             
 
           </div>
