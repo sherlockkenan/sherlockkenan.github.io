@@ -86,13 +86,13 @@
 
 
 
-<meta name="description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
+<meta name="description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数 据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久">
 <meta name="keywords" content="bigtable,论文笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Google三驾马车-Bigtable-论文笔记">
 <meta property="og:url" content="http://www.kexuehan.com/2018/04/13/论文笔记/Google三驾马车-Bigtable-论文笔记/index.html">
 <meta property="og:site_name" content="KeXH Blog">
-<meta property="og:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
+<meta property="og:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数 据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15236080017543.jpg">
 <meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238544902241.jpg">
@@ -100,10 +100,10 @@
 <meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238547779907.jpg">
 <meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238546947751.jpg">
 <meta property="og:image" content="http://oznz4l1s0.bkt.clouddn.com/15238556495043.jpg">
-<meta property="og:updated_time" content="2018-04-16T05:59:39.274Z">
+<meta property="og:updated_time" content="2018-04-16T06:13:36.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Google三驾马车-Bigtable-论文笔记">
-<meta name="twitter:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久化">
+<meta name="twitter:description" content="什么是Bigtable相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数 据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。 事实上它还是一个分布式的多层map的存储的结构。 Building Blocks在bigtable 用了其他的很多的Google的组件。  使用Google分布式文件系统(GFS)存储日志和数据文件。 BigTable还依赖一个高可用的、持久">
 <meta name="twitter:image" content="http://oznz4l1s0.bkt.clouddn.com/15236080017543.jpg">
 
 
@@ -411,7 +411,7 @@
       
 
       
-        <h4 id="什么是Bigtable"><a href="#什么是Bigtable" class="headerlink" title="什么是Bigtable"></a>什么是Bigtable</h4><p>相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。</p>
+        <h4 id="什么是Bigtable"><a href="#什么是Bigtable" class="headerlink" title="什么是Bigtable"></a>什么是Bigtable</h4><p>相比于传统的关系型数据库，bigtable 提供了分布式的非结构化的数 据存储，但没有提供sql的语义，所以是数据NoSQL的数据库。</p>
 <p>事实上它还是一个分布式的多层map的存储的结构。</p>
 <h4 id="Building-Blocks"><a href="#Building-Blocks" class="headerlink" title="Building Blocks"></a>Building Blocks</h4><p>在bigtable 用了其他的很多的Google的组件。</p>
 <ul>
